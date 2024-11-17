@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compras com Cerri</title>
+</head>
+<body>
+    <head>
+        <h1>Esse é o organizador de compras com o Cerri.</h1>
+        <h3>Insira abaixo o nome do produto e o valor, após isso aperte em enviar para salvar.</h3>
+        <h4>Para apagar aperte no X ao lado do produto desejado.</h4>
+    </head>
+    <main>
+        <section class="InsertValues">
+        <input type="text" id="product" placeholder="Nome do produto">
+        <input type="number" id="pvalue" placeholder="R$0.00" min="0">
+        <input type="number" id="pquantity" min="1" value="1">
+        <button onclick="AddProduct()">Adicionar</button>
+        </section>
+
+        <section class="Products">
+            <h2>Valor total: R$<a id="totalprice">0.00</a></h2>
+
+            <ul id="prodList">
+            </ul>
+        </section>
+    </main>
+
+
+</body>
+
+<script>
+    function AddTotalPrice(value){
+        let actualPrice = Number(document.getElementById("totalprice").textContent);
+        actualPrice += Number(value);
+        document.getElementById("totalprice").textContent = actualPrice.toFixed(2);
+    }
+
+    function RemoveTotalPrice(value) {
+        let actualPrice = Number(document.getElementById("totalprice").textContent);
+        actualPrice -= Number(value);
+        document.getElementById("totalprice").textContent = actualPrice.toFixed(2);
+    }
+
+    function AddProduct(){
+        //IInformações do produto
+        let prodName = document.getElementById("product").value;
+        let prodQuantity = document.getElementById("pquantity").value;
+        let prodPrice = document.getElementById("pvalue").value;
+        let prodTotalPrice = Number(prodPrice).toFixed(2) * Number(prodQuantity).toFixed(2);
+
+        //Criação do elemento para exibir no html
+        let prodList = document.getElementById("prodList");
+        let prodAdd = document.createElement("li");
+
+        //Botão de remover
+        let remove = document.createElement("button");
+        remove.textContent = "X";
+        remove.onclick = function () {
+            prodList.removeChild(prodAdd);
+            RemoveTotalPrice(prodTotalPrice);
+        };
+
+        //Link no HTML
+        prodAdd.textContent = `${prodName} - R$${prodPrice} x${prodQuantity} -> R$${prodTotalPrice}`;
+        prodAdd.appendChild(remove);
+        prodList.appendChild(prodAdd);
+
+        //Adicionar ao preço final
+        AddTotalPrice(prodTotalPrice);
+
+        //Reiniciar os inputs
+        document.getElementById("product").value = "";
+        document.getElementById("pvalue").value = "";
+        document.getElementById("pquantity").value = "1";
+    }
+</script>
+
+<style>
+    * {
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+</style>
+</html>
